@@ -49,8 +49,6 @@ export class NuevoCorreoComponent implements OnInit {
 
   onReset() {
     this.submitted = false;
-    if(this.correo != undefined)
-      this.correo.responder=false;
     this.nuevoCorreo.reset();
   }
 }
