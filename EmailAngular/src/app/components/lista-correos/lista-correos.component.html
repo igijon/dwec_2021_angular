@@ -18,7 +18,7 @@
             </td>
         </tr>
         <tr *ngIf="correo.responder">
-            <app-nuevo-correo [correo]="correo"></app-nuevo-correo>
+            <app-nuevo-correo [correo]="correo" (accionRealizada)="accionRespuestaRapida(correo)"></app-nuevo-correo>
         </tr>
     </ng-container>
 </table>
