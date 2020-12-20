@@ -23,7 +23,7 @@ export class LoginService {
     console.log(user);
     this.profile = user['xt'];
     this.tokenUser = user['xc'].access_token;
-    this.userId = this.profile['Eea'];
+    this.userId = this.profile['OT'];
   }
 
   public getSessionUser(): GoogleUser {

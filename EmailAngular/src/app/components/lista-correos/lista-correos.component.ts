@@ -1,4 +1,6 @@
+  
 import { Component, OnInit } from '@angular/core';
+import { GmailService } from 'src/app/services/gmail.service';
 
 @Component({
   selector: 'app-lista-correos',
@@ -8,56 +10,13 @@ import { Component, OnInit } from '@angular/core';
 export class ListaCorreosComponent implements OnInit {
 
   correos: any[];
-  responder: boolean;
 
-  constructor() {
-    const correo1 = {
-      titulo: "Título Email 1",
-      cuerpo: `Cuerpo del email, Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email `,
-      emisor: 'correoEmisor@prueba.com',
-      receptor: 'correoReceptor@prueba.com',
-      leido: true
-    };
-    const correo2 = {
-      titulo: "Título Email 2",
-      cuerpo: `Cuerpo del email, Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email `,
-      emisor: 'correoEmisor@prueba.com',
-      receptor: 'correoReceptor@prueba.com',
-      leido: false
-    };
-
+  constructor(private gmail: GmailService) {
     this.correos = [];
-    this.correos.push(correo1);
-    this.correos.push(correo2);
-
-    this.correos.push({
-      titulo: "Título Email 3",
-      cuerpo: `Cuerpo del email, Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-    Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-    Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email `,
-      emisor: 'correoEmisor3@prueba.com',
-      receptor: 'correoReceptor@prueba.com',
-      leido: false
-    });
-
-
-    this.correos.push({
-      titulo: "Título Email 4",
-      cuerpo: `Cuerpo del email, Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-    Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-    Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email `,
-      emisor: 'correoEmisor3@prueba.com',
-      receptor: 'correoReceptor@prueba.com',
-      leido: false
-    });
-    this.responder = false;
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.getRecibidos();
   }
 
   clickResponder(correo) {
@@ -65,7 +24,42 @@ export class ListaCorreosComponent implements OnInit {
   }
 
   accionRespuestaRapida(correo) {
-    correo.responder=false;
-  } 
+    correo.responder = false;
+  }
+
+  getRecibidos() {
+    this.gmail.getRecibidos().subscribe(
+      (response) => {
+        const mensajes = response.messages;
+        
+        mensajes.forEach(element => {
+          this.getMensaje(element.id);
+        });
+      },
+      (error) => this.error(error)
+    );
+  }
+
+  getMensaje(id: string){
+    this.gmail.getMessage(id).subscribe(
+      (response) => {
+        const emisor = response.payload.headers.find(e => e.name === "From");
+        const subject = response.payload.headers.find(e => e.name === "Subject");
+
+        const mensage = {
+          id: response.id,
+          cuerpo: response.snippet,
+          emisor: emisor? emisor.value : undefined,
+          titulo: subject? subject.value : undefined,
+        };
+        this.correos.push(mensage);
+      },
+      (error) => this.error(error)
+    );
+  }
+
+  error(error){
+    console.warn("ERROR");
+  }
 
 }
