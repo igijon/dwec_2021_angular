@@ -28,6 +28,7 @@ export class ListaCorreosComponent implements OnInit {
   }
 
   getRecibidos() {
+    /**Nos suscribimos al observable */
     this.gmail.getRecibidos().subscribe(
       (response) => {
         const mensajes = response.messages;
@@ -41,8 +42,10 @@ export class ListaCorreosComponent implements OnInit {
   }
 
   getMensaje(id: string){
+    /**Nos suscribimos al observable */
     this.gmail.getMessage(id).subscribe(
       (response) => {
+        console.log(response);
         const emisor = response.payload.headers.find(e => e.name === "From");
         const subject = response.payload.headers.find(e => e.name === "Subject");
 
