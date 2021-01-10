@@ -22,6 +22,7 @@ export class LoginService {
   private setUser(user: any){
     console.log(user);
     this.profile = user['xt'];
+    console.log(this.profile);
     this.tokenUser = user['xc'].access_token;
     this.userId = this.profile['OT'];
   }

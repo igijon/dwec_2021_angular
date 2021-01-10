@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-correo',
@@ -9,18 +10,18 @@ export class CorreoComponent implements OnInit {
 
   correo: any;
 
-  constructor() {
+  constructor(private route: ActivatedRoute) {
     this.correo = {
-      titulo: "Título Email",
-      cuerpo: `Cuerpo del email, Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email `,
-      emisor: 'correoEmisor@prueba.com',
-      destinatario: 'correoReceptor@prueba.com'
+      titulo: "",
+      cuerpo: "",
+      emisor: ""
     }
    }
 
   ngOnInit(): void {
+    //Obtenemos el parámetro enviado en la ruta (ver lista-correos.component.ts)
+    const datosRecibidos = this.route.snapshot.paramMap.get('correo');
+    this.correo = JSON.parse(datosRecibidos);
   }
 
 }

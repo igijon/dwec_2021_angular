@@ -16,6 +16,10 @@ import {
   NgGapiClientConfig,
   NG_GAPI_CONFIG
 } from "ng-gapi";
+import { MenuComponent } from './menu/menu.component';
+import { EnviarComponent } from './views/enviar/enviar.component';
+import { HomeComponent } from './views/home/home.component';
+import { VisualizarCorreoComponent } from './views/visualizar-correo/visualizar-correo.component';
 
 let gapiClientConfig: NgGapiClientConfig = {
   client_id: "134377892924-a3vvhui20kl0bkefcknh7pe9ab7i5gr7.apps.googleusercontent.com",
@@ -39,7 +43,11 @@ let gapiClientConfig: NgGapiClientConfig = {
     NuevoCorreoComponent,
     AvisosComponent,
     CorreosRecibidosComponent,
-    LoginComponent
+    LoginComponent,
+    MenuComponent,
+    EnviarComponent,
+    HomeComponent,
+    VisualizarCorreoComponent
   ],
   imports: [
     BrowserModule,
