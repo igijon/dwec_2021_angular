@@ -11,8 +11,9 @@ export class GmailService {
 
   /**Obtenemos un array de identificadores de mensajes pero no los mensajes */
   public getRecibidos = function () {
-    const url = "https://www.googleapis.com/gmail/v1/users/"+this.login.userId+"/messages?";
-    const authToken = this.login.tokenUser;
+    const url = "https://www.googleapis.com/gmail/v1/users/"+this.login.infoUser.userId+"/messages?";
+    
+    const authToken = this.login.infoUser.tokenUser;
     let headers = new HttpHeaders({ Authorization: `Bearer ${authToken}`});
     return this.http.get(url, { headers } );
   };
@@ -21,8 +22,8 @@ export class GmailService {
    * limitar el número de mensajes que recibimos
    */
   public getMessage = function (id: string) {
-    const url = "https://www.googleapis.com/gmail/v1/users/"+this.login.userId+"/messages/"+id;
-    const authToken = this.login.tokenUser;
+    const url = "https://www.googleapis.com/gmail/v1/users/"+this.login.infoUser.userId+"/messages/"+id;
+    const authToken = this.login.infoUser.tokenUser;
     let headers = new HttpHeaders({ Authorization: `Bearer ${authToken}`});
 
     let params = new HttpParams();
@@ -32,8 +33,8 @@ export class GmailService {
   };
 
   public sendMessage = function(text: string, to: string, subject: string){
-    const url="https://www.googleapis.com/gmail/v1/users/"+this.login.userId+"/messages/send";
-    const authToken = this.login.tokenUser;
+    const url="https://www.googleapis.com/gmail/v1/users/"+this.login.infoUser.userId+"/messages/send";
+    const authToken = this.login.infoUser.tokenUser;
     let headers = new HttpHeaders({
       'Content-Type': 'application/json',
       Authorization: `Bearer ${authToken}`
