@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CorreoService } from 'src/app/services/correo.service';
 
 @Component({
   selector: 'app-correo',
@@ -9,18 +11,22 @@ export class CorreoComponent implements OnInit {
 
   correo: any;
 
-  constructor() {
-    this.correo = {
-      titulo: "Título Email",
-      cuerpo: `Cuerpo del email, Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,
-      Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email,Cuerpo del email `,
-      emisor: 'correoEmisor@prueba.com',
-      destinatario: 'correoReceptor@prueba.com'
+  constructor(private route: ActivatedRoute, private correoService: CorreoService) {
+    if (correoService.correo)
+      this.correo = correoService.correo;
+    else {
+      this.correo = {
+        titulo: "",
+        cuerpo: "",
+        emisor: ""
+      }
     }
-   }
+  }
 
   ngOnInit(): void {
+    //Obtenemos el parámetro enviado en la ruta (ver lista-correos.component.ts)
+    //const datosRecibidos = this.route.snapshot.paramMap.get('correo');
+    //this.correo = JSON.parse(datosRecibidos);
   }
 
 }
