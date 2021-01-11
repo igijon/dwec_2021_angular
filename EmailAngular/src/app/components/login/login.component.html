@@ -1,14 +1,15 @@
 <div *ngIf="login.isUserSignedIn()">
-	<div>
-		<p>Nombre: {{login.infoUser.nombre}}</p>
-		<p>Email: {{login.infoUser.email}}</p>
-		<hr>
-		<button (click)="signOut()">Desconectar</button>
-		<hr>
-	</div>
+	<mat-card class="col-md-4 card">
+		<mat-card-header>
+			<mat-card-title>{{login.infoUser.nombre}}</mat-card-title>
+			<mat-card-subtitle>{{login.infoUser.email}}</mat-card-subtitle>
+		</mat-card-header>
+		<mat-card-actions>
+			<button mat-raised-button color="primary" (click)="signOut()">Desconectar</button>
+		</mat-card-actions>
+	</mat-card>
 </div>
+
 <div *ngIf="!login.isUserSignedIn()">
-	<hr>
-	<button (click)="signIn()"><span>Conectar con Google</span></button>
-	<hr>
+	<button mat-raised-button color="primary" (click)="signIn()">Conectar con Google</button>
 </div>
