@@ -9,25 +9,22 @@ import GoogleUser = gapi.auth2.GoogleUser;
 export class LoginService {
   public static readonly SESSION_STORAGE_KEY: string = "usuarioGoogle";
 
-  profile: any = undefined;
-  tokenUser: string;
-  userId: string;
+  infoUser: SessionUser;
 
   constructor(private googleAuthService: GoogleAuthService, private ngZone: NgZone) { 
     if(this.isUserSignedIn()){
       this.setUser(this.getSessionUser());
-    }
+    } 
+    if(!this.infoUser)
+      this.infoUser = new SessionUser();
   }
 
-  private setUser(user: any){
+  private setUser(user: SessionUser) {
     console.log(user);
-    this.profile = user['xt'];
-    console.log(this.profile);
-    this.tokenUser = user['xc'].access_token;
-    this.userId = this.profile['OT'];
+    this.infoUser = user;
   }
 
-  public getSessionUser(): GoogleUser {
+  public getSessionUser(): SessionUser {
     let user: string = sessionStorage.getItem(LoginService.SESSION_STORAGE_KEY);
     if (!user) {
       throw new Error("no token set , authentication required");
@@ -47,9 +44,10 @@ export class LoginService {
     this.googleAuthService.getAuth().subscribe((auth) => {
       try {
         auth.signOut();
-        this.profile = undefined;
-        this.tokenUser = undefined;
-        this.userId = undefined;
+        this.infoUser.tokenUser = undefined;
+        this.infoUser.userId = undefined;
+        this.infoUser.nombre = undefined;
+        this.infoUser.email = undefined;
       } catch (e) {
         console.error(e);
       }
@@ -63,14 +61,32 @@ export class LoginService {
 
   private signInSuccessHandler(res: GoogleUser) {
     this.ngZone.run(() => {
-      this.setUser(res);
+      console.log(JSON.stringify(res));
+      this.infoUser.tokenUser = res.getAuthResponse().access_token;
+      this.infoUser.userId = res.getId();
+      this.infoUser.nombre = res.getBasicProfile().getName();
+      this.infoUser.email = res.getBasicProfile().getEmail();
       sessionStorage.setItem(
-        LoginService.SESSION_STORAGE_KEY, JSON.stringify(res)
+        LoginService.SESSION_STORAGE_KEY, JSON.stringify(this.infoUser)
       );
     });
   }
 
   private signInErrorHandler(err) {
     console.warn(err);
+  }
+}
+
+class SessionUser {
+  tokenUser: string;
+  userId: string;
+  nombre: string;
+  email: string;
+
+  constructor() {
+    this.tokenUser = undefined;
+    this.userId = undefined;
+    this.nombre = undefined;
+    this.email = undefined;
   }
 }
