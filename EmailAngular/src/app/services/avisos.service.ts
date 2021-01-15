@@ -8,7 +8,10 @@ export class AvisosService {
 
   constructor(private _snackBar: MatSnackBar) {}
 
-  showMessage(mensaje: string){
+  showMessage(mensaje: string, tipo?:string){
+    let tipoMensaje = 'Información';
+    if (tipo)
+      tipoMensaje = tipo;
     this._snackBar.open(mensaje, 'Información', {
       duration: 2000,
     });
