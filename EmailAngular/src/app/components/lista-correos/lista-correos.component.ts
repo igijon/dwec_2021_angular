@@ -1,10 +1,10 @@
   
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { CorreoService } from 'src/app/services/correo.service';
-import { GmailService } from 'src/app/services/gmail.service';
+import { CorreoService } from '../../services/correo.service';
 import { trigger, state, transition, style, animate } from '@angular/animations';
 import { MatTableDataSource } from '@angular/material/table';
+import { GmailService } from '../../services/gmail.service';
 
 @Component({
   selector: 'app-lista-correos',
@@ -39,7 +39,7 @@ export class ListaCorreosComponent implements OnInit {
   }
 
   accionRespuestaRapida(correo) {
-    correo.responder = false;
+    this.expandedElement = null;
   }
 
   getRecibidos() {
