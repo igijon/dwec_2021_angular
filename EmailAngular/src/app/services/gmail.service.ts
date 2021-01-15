@@ -15,7 +15,10 @@ export class GmailService {
     
     const authToken = this.login.infoUser.tokenUser;
     let headers = new HttpHeaders({ Authorization: `Bearer ${authToken}`});
-    return this.http.get(url, { headers } );
+    let params = new HttpParams();
+    params.append('maxResults','10');
+
+    return this.http.get(url, { headers: headers, params: params} );
   };
 
   /**Puede generar un error al obtener un alto número de mensajes, después veremos cómo
