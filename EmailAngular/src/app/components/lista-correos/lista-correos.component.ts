@@ -3,15 +3,28 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { CorreoService } from 'src/app/services/correo.service';
 import { GmailService } from 'src/app/services/gmail.service';
+import { trigger, state, transition, style, animate } from '@angular/animations';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-lista-correos',
   templateUrl: './lista-correos.component.html',
-  styleUrls: ['./lista-correos.component.scss']
+  styleUrls: ['./lista-correos.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ]
 })
 export class ListaCorreosComponent implements OnInit {
 
   correos: any[];
+  columnsToDisplay: string[] = ['Emisor', 'Asunto', 'Acciones'];
+  displayedColumns: string[] = ['emisor', 'titulo', 'id'];
+  dataSource = new MatTableDataSource<any>();
+  expandedElement: any | null;
 
   constructor(private gmail: GmailService, private router: Router, private correoService: CorreoService) {
     this.correos = [];
@@ -57,7 +70,8 @@ export class ListaCorreosComponent implements OnInit {
           emisor: emisor? emisor.value : undefined,
           titulo: subject? subject.value : undefined,
         };
-        this.correos.push(mensage);
+        this.dataSource.data.push(mensage);
+        this.dataSource._updateChangeSubscription();
       },
       (error) => this.error(error)
     );
