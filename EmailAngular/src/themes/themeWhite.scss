@@ -1,0 +1,16 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+$palette-primary: mat-palette($mat-amber, A200);
+$palette-accent: mat-palette($mat-grey, 0);
+$palette-warn: mat-palette($mat-grey, 300);
+
+
+$white-theme: mat-light-theme(
+  $palette-primary,
+  $palette-accent,
+  $palette-warn
+);
+
+/*Exportamos variables para usar en scss*/
+$accent-white-color: mat-color($palette-accent);
