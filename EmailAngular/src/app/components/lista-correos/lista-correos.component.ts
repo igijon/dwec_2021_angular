@@ -6,6 +6,7 @@ import { trigger, state, transition, style, animate } from '@angular/animations'
 import { MatTableDataSource } from '@angular/material/table';
 import { GmailService } from '../../services/gmail.service';
 import { AvisosService } from '../../services/avisos.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-lista-correos',
@@ -27,8 +28,14 @@ export class ListaCorreosComponent implements OnInit {
   dataSource = new MatTableDataSource<any>();
   expandedElement: any | null;
 
+  //Suscripciones
+  recibidosSubscription: Subscription;
+  mensajesSubscription: Subscription[];
+
+
   constructor(private gmail: GmailService, private router: Router, private correoService: CorreoService, private servicioAvisos: AvisosService) {
     this.correos = [];
+    this.mensajesSubscription = [];
   }
 
   ngOnInit() {
@@ -42,9 +49,9 @@ export class ListaCorreosComponent implements OnInit {
 
   getRecibidos() {
     /**Nos suscribimos al observable */
-    this.gmail.getRecibidos().subscribe(
+    this.recibidosSubscription = this.gmail.getRecibidos().subscribe(
       (response) => {
-        const mensajes = response.messages;
+        const mensajes = response['messages'];
         
         mensajes.forEach(element => {
           this.getMensaje(element.id);
@@ -56,13 +63,13 @@ export class ListaCorreosComponent implements OnInit {
 
   getMensaje(id: string){
     /**Nos suscribimos al observable */
-    this.gmail.getMessage(id).subscribe(
+    this.mensajesSubscription.push(this.gmail.getMessage(id).subscribe(
       (correo) => {
         this.dataSource.data.push(correo);
         this.dataSource._updateChangeSubscription();
       },
       (error) => this.error(error)
-    );
+    ));
   }
 
   error(error){
@@ -74,4 +81,13 @@ export class ListaCorreosComponent implements OnInit {
     this.router.navigate(['/mail']);
   }
 
+  ngOnDestroy() {
+    if(!this.recibidosSubscription.closed) {
+      this.recibidosSubscription.unsubscribe();
+    }
+    this.mensajesSubscription.forEach(element => {
+      if(!element.closed)
+        element.unsubscribe();
+    })
+  }
 }
