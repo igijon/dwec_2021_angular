@@ -4,15 +4,11 @@ import { FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { NuevoCorreoComponent } from './components/nuevo-correo/nuevo-correo.component';
-//mport { AvisosComponent } from './components/avisos/avisos.component';
+//import { AvisosComponent } from './components/avisos/avisos.component';
 import { CorreosRecibidosComponent } from './views/correos-recibidos/correos-recibidos.component';
 import { LoginComponent } from './components/login/login.component';
 import { HttpClientModule } from '@angular/common/http';
-//Material libs
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatDividerModule } from '@angular/material/divider';
+
 
 import {
   GoogleApiModule,
@@ -23,13 +19,12 @@ import { MenuComponent } from './menu/menu.component';
 import { EnviarComponent } from './views/enviar/enviar.component';
 import { HomeComponent } from './views/home/home.component';
 import { VisualizarCorreoComponent } from './views/visualizar-correo/visualizar-correo.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CorreoComponent } from './components/correo/correo.component';
 import { ListaCorreosComponent } from './components/lista-correos/lista-correos.component';
 import { AppRoutingModule } from './app-routing.module';
-import { MatTableModule } from '@angular/material/table';
-import {MatInputModule} from '@angular/material/input';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+
+//Modules
+import {MaterialModule} from './modules/material/material.module';
 
 let gapiClientConfig: NgGapiClientConfig = {
   client_id: "134377892924-a3vvhui20kl0bkefcknh7pe9ab7i5gr7.apps.googleusercontent.com",
@@ -69,14 +64,7 @@ let gapiClientConfig: NgGapiClientConfig = {
       provide: NG_GAPI_CONFIG,
       useValue: gapiClientConfig
     }),
-    BrowserAnimationsModule,
-    MatButtonModule,
-    MatCardModule,
-    MatDividerModule,
-    MatToolbarModule,
-    MatTableModule,
-    MatInputModule,
-    MatSnackBarModule
+    MaterialModule
   ],
   providers: [],
   bootstrap: [AppComponent]
