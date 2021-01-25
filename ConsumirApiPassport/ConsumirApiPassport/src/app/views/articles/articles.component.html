@@ -1,0 +1,19 @@
+<table style="width: 100%; border: 1px solid black;">
+    <tr>
+      <th>ID</th>
+      <th>Titulo</th>
+      <th>Cuerpo</th>
+      <th>Acciones</th>
+    </tr>
+    <ng-container *ngFor="let article of articles; index as i;">
+      <tr>
+        <td>{{article.id}}</td>
+        <td>{{article.titulo}}</td>
+        <td>{{article.cuerpo}}</td>
+        <td>
+          <button (click)="borrar(article)">Borrar</button>
+        </td>
+  
+      </tr>
+    </ng-container>
+  </table>
