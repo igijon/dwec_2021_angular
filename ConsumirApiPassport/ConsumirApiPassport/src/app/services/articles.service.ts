@@ -8,10 +8,8 @@ import { LoginService } from './login.service';
 })
 export class ArticlesService {
 
-
+  user: any;
   constructor(private http: HttpClient, private loginService: LoginService, private router: Router) {
-    if (!loginService.isUserSignedIn())
-      router.navigate(['']);
   }
 
   /**
@@ -19,12 +17,45 @@ export class ArticlesService {
    */
   public getArticles = () => {
     const url = "http://localhost:8000/api/articles";
-
-    console.log(this.loginService.user.access_token);
-    let headers = new HttpHeaders({ Authorization: `Bearer ${this.loginService.user.access_token}` });
+    this.user = this.loginService.getUser();
+    let headers = new HttpHeaders({ Authorization: `Bearer ${this.user.access_token}` });
 
     return this.http.get(url, { headers: headers });
   };
 
+  public deleteArticle = (article: any) => {
+    const url = "http://localhost:8000/api/articles/" + article.id;
+    if (!this.user)
+      this.user = this.loginService.getUser();
+    let headers = new HttpHeaders({ Authorization: `Bearer ${this.user.access_token}` })
+
+    return this.http.delete(url, { headers: headers });
+  }
+
+  public insertArticle = (titulo: string, cuerpo: string) => {
+    const url = "http://localhost:8000/api/articles";
+
+    if (!this.user)
+      this.user = this.loginService.getUser();
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.user.access_token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.post(url, { 'title': titulo, 'body': cuerpo }, { headers: headers });
+  }
+
+  public updateArticle = (id: string, titulo: string, cuerpo: string) => {
+    const url = "http://localhost:8000/api/articles/"+id;
+
+    if (!this.user)
+      this.user = this.loginService.getUser();
+    let headers = new HttpHeaders({
+      Authorization: `Bearer ${this.user.access_token}`,
+      'Content-Type': 'application/json'
+    });
+
+    return this.http.put(url, { 'title': titulo, 'body': cuerpo }, { headers: headers });
+  }
 
 }
