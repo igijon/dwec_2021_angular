@@ -48,6 +48,9 @@ export class ArticleInsertedComponent implements OnInit {
     this.insertar(titulo, cuerpo);
   }
 
+  /**Se subscribe a la función insertArticle del servicio que realiza la 
+   * petición al api
+   */
   insertar(titulo: string, cuerpo: string) {
     this.articleService.insertArticle(titulo, cuerpo).subscribe(
       (response: any) => {

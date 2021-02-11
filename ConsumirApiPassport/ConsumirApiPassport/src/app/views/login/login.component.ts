@@ -50,20 +50,23 @@ export class LoginComponent implements OnInit {
     this.onReset();
     //Nos subscribimos a la petición de login que se implementa en el servicio
     this.login(usuario, password);
+    
   }
 
   login(email: string, password: string) {
     this.loginService.login(email, password).subscribe(
       (response: any) => {
+        //Aquí obtengo una response
         this.message = "Login correcto";
-        console.log(response);
         this.user.access_token = response['message']['access_token'];
         //response.message.access_token
         this.user.email = response.message.user.email;
+        //response['message']['user']['email']
         this.loginService.saveUser(this.user);
         this.router.navigate(['/articles']);
       },
       (error) => {
+        //Aquí obtengo un error
         this.message = error.error.message;
       }
     );
